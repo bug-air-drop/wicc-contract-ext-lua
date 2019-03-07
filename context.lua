@@ -42,21 +42,10 @@ _G.Context = {
             end
             setmetatable(mt, s)
             s.__index = s
-            s.__eq = _G._C.IHexArray.Equals
+            s.__eq = _G._C.IHexArray.__eq
             s.__tostring = _G._C.IHexArray.ToString
-            s.__concat = _G._C.IHexArray.Concat
+            s.__concat = _G._C.IHexArray.__concat
             return mt
-        end,
-        Equals = function(s, t)
-            if (#s ~= #t) then
-                return false
-            end
-            for i = #s, 1, -1 do
-                if s[i] ~= t[i] then
-                    return false
-                end
-            end
-            return true
         end,
         Appand = function(s, t)
             for i = 1, #t do
@@ -141,22 +130,7 @@ _G.Context = {
         Fill = function(s, t)
             local filled = {}
             if t.Loop then
-                if t.Loop < 0 then
-                    t.Loop = s:Next(math.abs(t.Loop)):ToInt()
-                end
-                local subt = {}
-                local maxStep = #s
-                if t.Loop > 0 then
-                    maxStep = s.Posit + t.Loop * t.Len
-                end
-                while s.Posit < maxStep do
-                    local cell = s:Next(t.Len)
-                    if t.Model then
-                        cell = cell:Fill(t.Model)
-                    end
-                    table.insert(subt, cell)
-                end
-                filled = subt
+                filled = s:__fillloop(t)
             else
                 local i = 1
                 while i<#t do
@@ -165,22 +139,7 @@ _G.Context = {
                     local vt = type(v)
                     if vt == "table" then
                         if v.Loop then
-                            if v.Loop < 0 then
-                                v.Loop = s:Next(math.abs(v.Loop)):ToInt()
-                            end
-                            local subt = {}
-                            local maxStep = #s
-                            if v.Loop > 0 then
-                                maxStep = s.Posit + v.Loop * v.Len
-                            end
-                            while s.Posit < maxStep do
-                                local cell = s:Next(v.Len)
-                                if v.Model then
-                                    cell = cell:Fill(v.Model)
-                                end
-                                table.insert(subt, cell)
-                            end
-                            filled[k] = subt
+                            filled[k] = s:__fillloop(v)
                         elseif #v==1 then
                             filled[k] = s:Next(v[1])
                         elseif v.Len then
@@ -204,11 +163,43 @@ _G.Context = {
             end
             return filled
         end,
+        __fillloop=function(s,t)
+            local endPosit = #s
+            if t.Loop < 0 then
+                t.Loop = s:Next(math.abs(t.Loop)):ToInt()
+            end
+            if t.Loop > 0 then
+                endPosit = s.Posit+(t.Loop*t.Len)-1
+            end
+            local subt = {}
+            while endPosit>=s.Posit do
+                local cell = s:Next(t.Len)
+                if t.Model then
+                    cell = cell:Fill(t.Model)
+                end
+                table.insert(subt, cell)
+            end
+            return subt
+        end,
         __expand = function(t, i)
             i = i or 1
             if t[i] then
                 return t[i], _G._C.IHexArray.__expand(t, i + 1)
             end
+        end,
+        __concat = function(s, t)
+            return s:ToString()..t
+        end,
+        __eq = function(s, t)
+            if (#s ~= #t) then
+                return false
+            end
+            for i = #s, 1, -1 do
+                if s[i] ~= t[i] then
+                    return false
+                end
+            end
+            return true
         end
     },
     IAppData = {
