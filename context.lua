@@ -443,15 +443,16 @@ _G.ErrExt={
         _G.ErrExt[0401]='operation not permitted'
         _G.ErrExt[0404]='domain or method not found, call:%s'
         _G.ErrExt[0500]='an exception occurred during a mylib call, method:%s'
+        --add you error msg here
     end,
     GetErrorMsg = function(code,...)
         if _G.ErrExt[code] then
             local s = (_G.ErrExt.json and '{"code":"%s","msg":"%s"}')
-                        or '[%s] errcode=%s, msg=%s'
+                        or 'errcode=%s, msg=%s'
             _G._errmsg=string.format(s,code,string.format(_G.ErrExt[code],...))
         else
             local s = (_G.ErrExt.json and '{"code":"%s","msg":"unknow exception"}')
-                        or '[%s] unknow exception,errcode=%s'
+                        or 'unknow exception,errcode=%s'
             _G._errmsg=string.format(s,code,...)
         end
         return false,_G._errmsg
