@@ -23,7 +23,6 @@ _G.Context.Init()
 local obj=Hex:New({0x61}) -- _G 可以省略, 在代码长度不超过64kb时, 尽量在定义或引用全局变量时, 带上 _G
 local obj2=_G.Context.IHexArray:New({0x61}) --不映射时就写比较长
 _G.Log('hello')
-_G.Error('wayki')
 print(_G._C._Version) --为了方便 Context也映射为一个全局变量 _C
 ```
 当前传入合约调用数据的最佳实践是如下的编码格式:
@@ -395,3 +394,23 @@ contract={0x61,0x62}
 print(Hex:New(contract))
 
 ```
+
+### 异常模块 ErrExt
+
+ErrExt是对可选的模块, 当你不添加这个模块时, Context报出的异常只有简短的错误代码(code)编号, 但你仍然可以结合coind返回的错误行号去定位具体的代码
+
+{"code":"404"}
+
+添加ErrExt后, 你就可以获得更多的错误信息:
+
+{"code":"404","msg":"domain or method not found, call:153"}
+
+msg中的信息, 就是在ErrExt中配置. 也可以直接写入.
+
+```lua
+_G.ErrExt[888]='这是一条自定义错误描述信息, %s'
+assert(1>1 or _G._err(888,'没有说明'),_G._errmsg) --使用这个格式去做断言, 使用自定义错误内容的同时仍得到正确的错误行号信息
+```
+
+
+
