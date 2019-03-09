@@ -103,8 +103,8 @@ _G.LibHelp={
         assert(money > 0, money .. " <=0 error")
         local freeMoney = _G.LibHelp.GetFreeTokenCount(fromAddrTbl)
         assert(freeMoney >= money, "Insufficient money to transfer in the account.")
-        _G.LibHelp.WriteAppData(_G.LibHelp.OP_TYPE.SUB_FREE, moneyTbl, fromAddrTbl )
-        _G.LibHelp.WriteAppData(_G.LibHelp.OP_TYPE.ADD_FREE, moneyTbl, toAddrTbl )
+        assert(_G.LibHelp.WriteAppData(_G.LibHelp.OP_TYPE.SUB_FREE, moneyTbl, fromAddrTbl) and _G.LibHelp.WriteAppData(_G.LibHelp.OP_TYPE.ADD_FREE, moneyTbl, toAddrTbl),
+        'Failure to operate transfer')
     end,
     GetCurrTxAccountAddress = function ()
         return {_G.mylib.GetBase58Addr(_G.mylib.GetCurTxAccount())}
