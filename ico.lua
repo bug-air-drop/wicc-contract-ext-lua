@@ -140,7 +140,7 @@ _G.ICO={
         for k,v in pairs(_G.LibHelp.StandardKey) do
             if _G.Config[k] then
                 local value = {}
-                if type(k) ==  "number" then
+                if type(_G.Config[k]) ==  "number" then
                     value = {_G.mylib.IntegerToByte8(_G.Config[k])}
                 else
                     value = {string.byte(_G.Config[k],1,string.len(_G.Config[k])) }
