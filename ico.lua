@@ -1,33 +1,25 @@
 mylib = require "mylib"
 
 ------------------------------------------------------------------------------------
--- notice:
--- 注意: 以下是对配置当前合约的发行参数, 请修改也只能修改以下区域的参数
 
 _G.Config={
     -- the waykichain contract stardard, if you do not know the waykichain stardard, please do not change it.
-    -- 表示符合的维基链合约标准,在此处您不该修改这个值.
     standard = "WRC20",
 
     -- the contract ownder address, please write the right address.
-    -- 表示合约的拥有者, 当初始化这个合约时, 会将发行的token转入此地址中.
     owner = "wLKf2NqwtHk3BfzK5wMDfbKYN1SC3weyR4",
 
     -- the contract name
-    -- 合约的名称, 也是当前合约代表的WaykiToken的名称
     name = "WRC20N",
 
     -- the contract symbol
-    -- WaykiToken的符号
     symbol = "WRC20S",
 
     -- the number of decimals the token uses - e.g. 8,
     -- means to divide the token amount by 100000000 to get its user representation.
-    -- WaykiToken的精度
     decimals = 8,
 
     -- the contract coin total supply
-    -- 初始发行的WaykiToken总数
     totalSupply = 210000000 * 100000000
 }
 
