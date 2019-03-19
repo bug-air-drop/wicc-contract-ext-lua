@@ -140,7 +140,7 @@ _G.ICO={
         for k,v in pairs(_G.LibHelp.StandardKey) do
             if _G.Config[k] then
                 local value = {}
-                if k ==  "decimals" or k == "totalSupply" then
+                if type(k) ==  "number" then
                     value = {_G.mylib.IntegerToByte8(_G.Config[k])}
                 else
                     value = {string.byte(_G.Config[k],1,string.len(_G.Config[k])) }
@@ -159,7 +159,6 @@ _G.ICO={
         -- issue tokens
         local totalSupplyTbl =  {_G.mylib.IntegerToByte8(_G.Config.totalSupply)}
         _G.LibHelp.WriteAppData(_G.LibHelp.OP_TYPE.ADD_FREE, totalSupplyTbl,{string.byte(_G.Config.owner,1,string.len(_G.Config.owner))})
-
         _G.LibHelp.LogMsg("contract config success, name: ".._G.Config.name.."issuer: ".._G.Config.owner)
       end
 }
