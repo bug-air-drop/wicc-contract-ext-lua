@@ -15,7 +15,7 @@ _G.Config={
     -- the contract symbol
     symbol = "WRC20S",
 
-    -- the number of decimals the token uses - e.g. 8,
+    -- the number of decimals the token uses must be 8,
     -- means to divide the token amount by 100000000 to get its user representation.
     decimals = 8,
 
