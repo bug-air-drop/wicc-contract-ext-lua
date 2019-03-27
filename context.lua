@@ -287,6 +287,9 @@ _G.Context = {
             return mtb:ToInt()
         end,
         GetAppAsset = function(addr)
+            if type(addr) == _G._C._s then
+                addr = _G.Hex:New(addr)
+            end
             local mtb = _G.Hex:New({_G._C.Lib.GetUserAppAccValue({idLen = #addr, idValueTbl = addr})})
             assert(#mtb > 0 or _G._err(0500,'GetUserAppAccValue'),_G._errmsg)
             return mtb:ToInt()
