@@ -206,11 +206,11 @@ _G.Context = {
     IAppData = {
         SafeRead = function(key)
             assert(#key > 1 or _G._err(0001,#key),_G._errmsg)
-            local value = _G.Hex:New({_G._C.Lib.ReadData(key)})
-            if value.IsEmpty() then
+            local value= {_G._C.Lib.ReadData(key)}
+            if value[1]==nil then
                 return false, nil
             else
-                return true, value
+                return true, _G.Hex:New(value)
             end
         end,
         Read = function(key)
