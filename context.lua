@@ -1,7 +1,7 @@
 mylib = require "mylib"
 
 _G.Context = {
-    _Version = "1.0.2 preview",
+    _Version = "1.0.3 preview",
     _Author = "Mr.Meeseeks",
     _Site = "https://github.com/GitHubbard/wicc-contract-ext-lua",
     Lib = require "mylib",
@@ -10,7 +10,6 @@ _G.Context = {
     _s="string",
     _n="number",
     Event = {},
-    Contract = {},
     CallDomain = 0x00,
     CallFunc = 0x00,
     RecvData = {},
@@ -407,10 +406,11 @@ _G.Context = {
     end,
     LoadContract = function()
         if #_G.contract > 0 then
-            _G._C.Contract = _G.Hex:New(_G.contract)
-            _G._C.CallDomain = _G._C.Contract[1]
-            _G._C.CallFunc   = _G._C.Contract[2]
-            _G._C.RecvData   = _G._C.Contract:Skip(2)
+            _G._C.RecvData   = _G.contract
+            _G._C.CallDomain = _G.contract[1]
+            table.remove(_G._C.RecvData,1)
+            _G._C.CallFunc   = _G.contract[1]
+            table.remove(_G._C.RecvData,1)
             _G.RecvData = _G._C.RecvData
         end
     end,
@@ -466,6 +466,7 @@ _G.ContextTestUnit={
     Init=function()
         _G._C.Event[0xaa]=_G.ContextTestUnit
         _G.ContextTestUnit[0xaa]=_G.ContextTestUnit.HexArrayTest
+        _G.ContextTestUnit[0x00]=_G.ContextTestUnit.BaseGasTest
         _G.ContextTestUnit[0x01]=_G.ContextTestUnit.GetCurTxAddrTest
         _G.ContextTestUnit[0x02]=_G.ContextTestUnit.GetCurTxPayAmountTest
         _G.ContextTestUnit[0x03]=_G.ContextTestUnit.AppDataWrtieTest
@@ -482,6 +483,8 @@ _G.ContextTestUnit={
         _G.ContextTestUnit[0x14]=_G.ContextTestUnit.HexFillTest2
         _G.ContextTestUnit[0x15]=_G.ContextTestUnit.HexFillTest3
         --TODO
+    end,
+    BaseGasTest=function()
     end,
     HexArrayTest=function()
         local str="I'm Mr.Meeseeks~Look at me~"
